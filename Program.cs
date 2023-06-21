@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            //bruh//
             Console.WriteLine("EX 1");
             Console.Write("Write a number between 1 and 100: ");
             int number;
