@@ -28,6 +28,17 @@
             employee.InputData();
             Console.WriteLine("----------------------");
             employee.OutputData();
+
+            Console.WriteLine("Enter the amount to increase the salary:");
+            decimal increaseAmount = decimal.Parse(Console.ReadLine());
+            employee.IncreaseSalary(increaseAmount);
+
+            Console.WriteLine("Enter the amount to decrease the salary:");
+            decimal decreaseAmount = decimal.Parse(Console.ReadLine());
+            employee.DecreaseSalary(decreaseAmount);
+
+            Console.WriteLine("----------------------");
+            employee.OutputData();
         }
         static void Exercise2()
         {
