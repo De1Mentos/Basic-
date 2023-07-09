@@ -67,6 +67,83 @@
             return a;
         }
     }
+    struct ComplexNumber
+    {
+        public double Real;
+        public double Imaginary;
+
+        public ComplexNumber(double real, double imaginary)
+        {
+            Real = real;
+            Imaginary = imaginary;
+        }
+
+        public ComplexNumber Add(ComplexNumber other)
+        {
+            double resultReal = Real + other.Real;
+            double resultImaginary = Imaginary + other.Imaginary;
+            return new ComplexNumber(resultReal, resultImaginary);
+        }
+
+        public ComplexNumber Subtract(ComplexNumber other)
+        {
+            double resultReal = Real - other.Real;
+            double resultImaginary = Imaginary - other.Imaginary;
+            return new ComplexNumber(resultReal, resultImaginary);
+        }
+
+        public ComplexNumber Multiply(ComplexNumber other)
+        {
+            double resultReal = Real * other.Real - Imaginary * other.Imaginary;
+            double resultImaginary = Real * other.Imaginary + Imaginary * other.Real;
+            return new ComplexNumber(resultReal, resultImaginary);
+        }
+
+        public ComplexNumber Divide(ComplexNumber other)
+        {
+            double denominator = other.Real * other.Real + other.Imaginary * other.Imaginary;
+            double resultReal = (Real * other.Real + Imaginary * other.Imaginary) / denominator;
+            double resultImaginary = (Imaginary * other.Real - Real * other.Imaginary) / denominator;
+            return new ComplexNumber(resultReal, resultImaginary);
+        }
+    }
+    struct Birthday
+    {
+        private DateTime _birthDate;
+
+        public Birthday(DateTime birthDate)
+        {
+            _birthDate = birthDate;
+        }
+
+        public void SetBirthDate(DateTime birthDate)
+        {
+            _birthDate = birthDate;
+        }
+
+        public DayOfWeek GetBirthDayOfWeek()
+        {
+            return _birthDate.DayOfWeek;
+        }
+
+        public DayOfWeek GetBirthDayOfWeek(int year)
+        {
+            DateTime targetDate = new DateTime(year, _birthDate.Month, _birthDate.Day);
+            return targetDate.DayOfWeek;
+        }
+
+        public int GetDaysUntilBirthday()
+        {
+            DateTime today = DateTime.Today;
+            DateTime nextBirthday = new DateTime(today.Year, _birthDate.Month, _birthDate.Day);
+
+            if (nextBirthday < today)
+                nextBirthday = nextBirthday.AddYears(1);
+
+            TimeSpan timeUntilBirthday = nextBirthday - today;
+            return timeUntilBirthday.Days;
+        }
+    }
     internal class Program
     {
         static void Main(string[] args)
@@ -97,10 +174,38 @@
                     }
                 case 2:
                     {
+                        ComplexNumber number1 = new ComplexNumber(2, 3);
+                        ComplexNumber number2 = new ComplexNumber(1, 4);
+
+                        ComplexNumber sum = number1.Add(number2);
+                        Console.WriteLine($"Sum: {sum.Real} + {sum.Imaginary}i");
+
+                        ComplexNumber difference = number1.Subtract(number2);
+                        Console.WriteLine($"Difference: {difference.Real} + {difference.Imaginary}i");
+
+                        ComplexNumber product = number1.Multiply(number2);
+                        Console.WriteLine($"Product: {product.Real} + {product.Imaginary}i");
+
+                        ComplexNumber quotient = number1.Divide(number2);
+                        Console.WriteLine($"Quotient: {quotient.Real} + {quotient.Imaginary}i");
+
+                        Console.ReadLine();
+
                         break;
                     }
                 case 3:
                     {
+                        Birthday birthday = new Birthday(new DateTime(2000, 4, 1));
+
+                        Console.WriteLine($"Birth Day of Week: {birthday.GetBirthDayOfWeek()}");
+
+                        DayOfWeek birthDayOfWeekIn2025 = birthday.GetBirthDayOfWeek(2025);
+                        Console.WriteLine($"Birth Day of Week in 2025: {birthDayOfWeekIn2025}");
+
+                        int daysUntilBirthday = birthday.GetDaysUntilBirthday();
+                        Console.WriteLine($"Days Until Birthday: {daysUntilBirthday}");
+
+                        Console.ReadLine();
                         break;
                     }
             }
