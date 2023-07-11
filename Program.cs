@@ -93,6 +93,36 @@ namespace С__Pack
 
         static void Exercise2()
         {
+            Action displayCurrentTime = () =>
+            {
+                Console.WriteLine(DateTime.Now.ToLongTimeString());
+            };
+            Action displayCurrentDate = () =>
+            {
+                Console.WriteLine(DateTime.Now.ToShortDateString());
+            };
+            Action displayCurrentDayOfWeek = () =>
+            {
+                Console.WriteLine(DateTime.Now.DayOfWeek);
+            };
+            Func<double, double, double, double> calculateTriangleArea = (baseLength, height, sideLength) =>
+            {
+                return 0.5 * baseLength * height;
+            };
+            Func<double, double, double> calculateRectangleArea = (length, width) =>
+            {
+                return length * width;
+            };
+
+            displayCurrentTime();
+            displayCurrentDate();
+            displayCurrentDayOfWeek();
+
+            double triangleArea = calculateTriangleArea(5, 8, 4);
+            Console.WriteLine("Triangle area: " + triangleArea);
+
+            double rectangleArea = calculateRectangleArea(10, 6);
+            Console.WriteLine("Rectangle area: " + rectangleArea);
         }
 
         static void Exercise3()
