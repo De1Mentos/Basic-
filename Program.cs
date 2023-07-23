@@ -3,105 +3,183 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-
-    public class FootballPlayer
+    class Book
     {
-        public string Name { get; set; }
-        public int Number { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public string Genre { get; set; }
+        public int YearPublished { get; set; }
+
+        public Book(string title, string author, string genre, int yearPublished)
+        {
+            Title = title;
+            Author = author;
+            Genre = genre;
+            YearPublished = yearPublished;
+        }
+    }
+
+    class BookManagement
+    {
+        private LinkedList<Book> books;
+
+        public BookManagement()
+        {
+            books = new LinkedList<Book>();
+        }
+
+        public void AddBook(Book book)
+        {
+            books.AddLast(book);
+        }
+
+        public void RemoveBook(Book book)
+        {
+            books.Remove(book);
+        }
+
+        public void UpdateBook(Book book, string title, string author, string genre, int yearPublished)
+        {
+            book.Title = title;
+            book.Author = author;
+            book.Genre = genre;
+            book.YearPublished = yearPublished;
+        }
+
+        public List<Book> SearchBooks(string searchTerm)
+        {
+            List<Book> results = new List<Book>();
+            foreach (var book in books)
+            {
+                if (book.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    book.Author.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    book.Genre.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    book.YearPublished.ToString().Contains(searchTerm))
+                {
+                    results.Add(book);
+                }
+            }
+            return results;
+        }
+
+        public void InsertAtStart(Book book)
+        {
+            books.AddFirst(book);
+        }
+
+        public void InsertAtEnd(Book book)
+        {
+            books.AddLast(book);
+        }
+
+        public void InsertAtPosition(Book book, int position)
+        {
+            if (position <= 0)
+            {
+                books.AddFirst(book);
+            }
+            else if (position >= books.Count)
+            {
+                books.AddLast(book);
+            }
+            else
+            {
+                var currentNode = books.First;
+                for (int i = 0; i < position; i++)
+                {
+                    currentNode = currentNode.Next;
+                }
+                books.AddBefore(currentNode, book);
+            }
+        }
+
+        public void RemoveFromStart()
+        {
+            if (books.Count > 0)
+            {
+                books.RemoveFirst();
+            }
+        }
+
+        public void RemoveFromEnd()
+        {
+            if (books.Count > 0)
+            {
+                books.RemoveLast();
+            }
+        }
+
+        public void RemoveFromPosition(int position)
+        {
+            if (position < 0 || position >= books.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(position), "Invalid position");
+            }
+            var currentNode = books.First;
+            for (int i = 0; i < position; i++)
+            {
+                currentNode = currentNode.Next;
+            }
+            books.Remove(currentNode);
+        }
+    }
+
+    class Employee
+    {
+        public string FullName { get; set; }
         public string Position { get; set; }
+        public decimal Salary { get; set; }
+        public string Email { get; set; }
 
-        public FootballPlayer(string name, int number, string position)
+        public Employee(string fullName, string position, decimal salary, string email)
         {
-            Name = name;
-            Number = number;
+            FullName = fullName;
             Position = position;
+            Salary = salary;
+            Email = email;
         }
     }
 
-    public class FootballTeam : IEnumerable<FootballPlayer>
+    class EmployeeManagement
     {
-        private List<FootballPlayer> players;
+        private List<Employee> employees;
 
-        public FootballTeam()
+        public EmployeeManagement()
         {
-            players = new List<FootballPlayer>();
+            employees = new List<Employee>();
         }
 
-        public void AddPlayer(FootballPlayer player)
+        public void AddEmployee(Employee employee)
         {
-            players.Add(player);
+            employees.Add(employee);
         }
 
-        public IEnumerator<FootballPlayer> GetEnumerator()
+        public void RemoveEmployee(Employee employee)
         {
-            return players.GetEnumerator();
+            employees.Remove(employee);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public void UpdateEmployee(Employee employee, string fullName, string position, decimal salary, string email)
         {
-            return GetEnumerator();
-        }
-    }
-    public class MarineCreature
-    {
-        public string Name { get; set; }
-        public string Species { get; set; }
-        public int Age { get; set; }
-        public string Description { get; set; }
-
-        public MarineCreature(string name, string species, int age, string description)
-        {
-            Name = name;
-            Species = species;
-            Age = age;
-            Description = description;
-        }
-    }
-
-    public class Dolphin : MarineCreature
-    {
-        public int JumpHeight { get; set; }
-
-        public Dolphin(string name, string species, int age, string description, int jumpHeight) : base(name, species, age, description)
-        {
-            JumpHeight = jumpHeight;
-        }
-    }
-
-    public class Shark : MarineCreature
-    {
-        public bool IsDangerous { get; set; }
-        public Shark(string name, string species, int age, string description, bool isDangerous) : base(name, species, age, description)
-        {
-            IsDangerous = isDangerous;
-        }
-    }
-
-    public class Oceanarium : IEnumerable<MarineCreature>
-    {
-        private List<MarineCreature> creatures;
-
-        public Oceanarium()
-        {
-            creatures = new List<MarineCreature>();
+            employee.FullName = fullName;
+            employee.Position = position;
+            employee.Salary = salary;
+            employee.Email = email;
         }
 
-        public void AddCreature(MarineCreature creature)
+        public List<Employee> SearchEmployees(string searchTerm)
         {
-            creatures.Add(creature);
+            return employees
+                .Where(e =>
+                    e.FullName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    e.Position.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    e.Email.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                .ToList();
         }
 
-        public IEnumerator<MarineCreature> GetEnumerator()
+        public List<Employee> SortEmployeesBySalary()
         {
-            return creatures.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            return employees.OrderBy(e => e.Salary).ToList();
         }
     }
     internal class Program
@@ -123,36 +201,63 @@
                     break;
                     static void Exercise1()
                     {
-                        Oceanarium myOceanarium = new Oceanarium();
+                        EmployeeManagement employeeManagement = new EmployeeManagement();
 
-                        myOceanarium.AddCreature(new Dolphin("DOLPE", "Smart Dolphin", 5, "Friendly and cool^^" , 3));
-                        myOceanarium.AddCreature(new Shark("KUSAKA", "Great White", 15, "Angry and bity >w<", true));
-                        foreach (MarineCreature creature in myOceanarium)
+                        employeeManagement.AddEmployee(new Employee("Joseph Stalin", "Secretar", 3500, "Stalin@example.com"));
+                        employeeManagement.AddEmployee(new Employee("Lenin Kurlov", "Financial CEO", 4000, "Lenin@example.com"));
+                        employeeManagement.AddEmployee(new Employee("Mao Dzedung", "Manager", 3200, "Mao@example.com"));
+
+                        Employee employeeToUpdate = employeeManagement.SearchEmployees("Іван Петров").FirstOrDefault();
+                        if (employeeToUpdate != null)
                         {
-                            Console.WriteLine($"Name: {creature.Name}, Species: {creature.Species}, Age: {creature.Age}, Description: {creature.Description}");
-                            if (creature is Dolphin dolphin)
-                            {
-                                Console.WriteLine($"Jump Height: {dolphin.JumpHeight}");
-                            }
-                            else if (creature is Shark shark)
-                            {
-                                Console.WriteLine($"Is Dangerous: {shark.IsDangerous}");
-                            }
-                            Console.WriteLine();
+                            employeeManagement.UpdateEmployee(employeeToUpdate, "Joe Fanicov", "Manager of trade", 3800, "Joe.Fanicov@example.com");
+                        }
+
+                        List<Employee> searchResults = employeeManagement.SearchEmployees("Maria");
+                        Console.WriteLine("RESULT OF SEARCH:");
+                        foreach (Employee employee in searchResults)
+                        {
+                            Console.WriteLine($"{employee.FullName} - {employee.Position} - {employee.Email}");
+                        }
+
+                        List<Employee> sortedEmployees = employeeManagement.SortEmployeesBySalary();
+                        Console.WriteLine("SORTED:");
+                        foreach (Employee employee in sortedEmployees)
+                        {
+                            Console.WriteLine($"{employee.FullName} - {employee.Position} - {employee.Email} - {employee.Salary}");
                         }
                     }
                     static void Exercise2()
                     {
-                        FootballTeam myTeam = new FootballTeam();
+                        BookManagement bookManagement = new BookManagement();
 
-                        myTeam.AddPlayer(new FootballPlayer("Habibi Sus", 10, "Forward"));
-                        myTeam.AddPlayer(new FootballPlayer("JOHN. JOHN SMITH", 5, "Defender"));
-                        myTeam.AddPlayer(new FootballPlayer("Mike Vasovski", 1, "Goalkeeper"));
+                        bookManagement.AddBook(new Book("The Great Gatsby", "F. Scott Fitzgerald", "Classic", 1925));
+                        bookManagement.AddBook(new Book("To Kill a Mockingbird", "Harper Lee", "Fiction", 1960));
+                        bookManagement.AddBook(new Book("1984", "George Orwell", "Dystopian", 1949));
 
-                        Console.WriteLine("Football Team Players:");
-                        foreach (FootballPlayer player in myTeam)
+                        List<Book> searchResults = bookManagement.SearchBooks("Mockingbird");
+                        Console.WriteLine("Search Results:");
+                        foreach (var book in searchResults)
                         {
-                            Console.WriteLine($"Name: {player.Name}, Number: {player.Number}, Position: {player.Position}");
+                            Console.WriteLine($"Title: {book.Title}, Author: {book.Author}, Genre: {book.Genre}, Year Published: {book.YearPublished}");
+                        }
+
+                        bookManagement.InsertAtStart(new Book("Zipi Zubi", "J.D", "Classic", 1951));
+
+                        bookManagement.InsertAtEnd(new Book("1984", "George Orwell", "Political Allegory", 1945));
+
+                        bookManagement.InsertAtPosition(new Book("Intermezzo", "Jane Austen", "Romance", 1813), 2);
+
+                        bookManagement.RemoveFromStart();
+
+                        bookManagement.RemoveFromEnd();
+
+                        bookManagement.RemoveFromPosition(1);
+
+                        Console.WriteLine("Remaining Books:");
+                        foreach (var book in bookManagement.SearchBooks(""))
+                        {
+                            Console.WriteLine($"Title: {book.Title}, Author: {book.Author}, Genre: {book.Genre}, Year Published: {book.YearPublished}");
                         }
                     }
                     static void Exercise3()
